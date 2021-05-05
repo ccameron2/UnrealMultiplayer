@@ -42,9 +42,16 @@ void APlayableCharacter::Tick(float DeltaTime)
 	GetCharacterMovement()->SafeMoveUpdatedComponent(FVector(0.f, 0.f, -0.01f), GetActorRotation(), true, OutHit);
 
 	FVector Location = GetActorLocation();
-	if (Location.Z < 0)
+	if (Location.Z < -100)
 	{
-		SetActorLocation({ 0,0,0 });
+		if (CheckpointRef != nullptr)
+		{
+			SetActorLocation(FVector(CheckpointRef->GetActorLocation()), false, nullptr, ETeleportType::ResetPhysics);
+		}
+		else
+		{
+			SetActorLocation({ -200,600,0 }, false, nullptr, ETeleportType::ResetPhysics);
+		}
 	}
 }
 
@@ -52,7 +59,11 @@ void APlayableCharacter::Tick(float DeltaTime)
 void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
 
+void APlayableCharacter::SetLatestCheckpoint(ACheckpoint* Checkpoint)
+{
+	CheckpointRef = Checkpoint;
 }
 
 void APlayableCharacter::MoveForward(float AxisValue)

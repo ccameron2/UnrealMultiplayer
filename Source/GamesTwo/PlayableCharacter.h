@@ -4,6 +4,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Checkpoint.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -35,7 +36,10 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		float DiveStrength = 1000.0f;
-
+	UFUNCTION()
+		void SetLatestCheckpoint(ACheckpoint* Checkpoint);
+	UPROPERTY(VisibleAnywhere)
+		ACheckpoint* CheckpointRef;
 private:
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* Camera;
@@ -45,4 +49,7 @@ private:
 
 	UFUNCTION(Server, Reliable, WithValidation) //RPC
 		void ServerDive();
+
+
+
 };
