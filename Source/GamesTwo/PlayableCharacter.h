@@ -21,7 +21,7 @@ public:
 	void Strafe(float AxisValue);
 	void Turn(float AxisValue);
 	void LookUp(float AxisValue);
-
+	void Dive();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,13 +33,16 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere)
+		float DiveStrength = 1000.0f;
+
 private:
 	UPROPERTY(EditAnywhere)
-		USkeletalMeshComponent* characterMesh;
+		UCameraComponent* Camera;
 
 	UPROPERTY(EditAnywhere)
-		UCameraComponent* camera;
+		USpringArmComponent* SpringArm;
 
-	UPROPERTY(EditAnywhere)
-		USpringArmComponent* springArm;
+	UFUNCTION(Server, Reliable, WithValidation) //RPC
+		void ServerDive();
 };

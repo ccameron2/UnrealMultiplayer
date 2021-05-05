@@ -21,6 +21,7 @@ void ACustomPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Strafe", this, &ACustomPlayerController::CallStrafe);
 	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ACustomPlayerController::CallJump);
 	InputComponent->BindAxis("Look Up", this, &ACustomPlayerController::CallLookUp);
+	InputComponent->BindAction("Dive", EInputEvent::IE_Pressed, this, &ACustomPlayerController::CallDive);
 
 }
 
@@ -61,6 +62,14 @@ void ACustomPlayerController::CallLookUp(float Value)
 {
 	if (MyPawn)
 	{
-		MyPawn->LookUp(Value);
+		MyPawn->LookUp(-Value);
+	}
+}
+
+void ACustomPlayerController::CallDive()
+{
+	if (MyPawn)
+	{
+		MyPawn->Dive();
 	}
 }

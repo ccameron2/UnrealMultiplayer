@@ -17,7 +17,7 @@ class GAMESTWO_API ACustomPlayerController : public APlayerController
 public:
 	void SetupInputComponent();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 		class APlayableCharacter* MyPawn;
 
 protected:
@@ -29,4 +29,5 @@ private:
 	virtual void CallStrafe(float Value);
 	virtual void CallJump();
 	virtual void CallLookUp(float Value);
+	virtual void CallDive();
 };

@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "GameFramework/CharacterMovementComponent.h" 
 #include "PlayableCharacter.h"
 
 // Sets default values
@@ -9,25 +9,19 @@ APlayableCharacter::APlayableCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//Create skeletal mesh
-	characterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Skeletal Mesh"));
-
-	//Set skeletal mesh as root component
-	SetRootComponent(characterMesh);
-
 	// Create spring arm and attach to staticMesh
-	springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 
 	// Springarm settings
-	springArm->TargetArmLength = 300.0f;
-	springArm->bEnableCameraLag = false;
-	springArm->SetRelativeRotation((new FRotator(0.0f, 0.0f, 0.0f))->Quaternion());
-	springArm->SetRelativeLocation(FVector(-361.0f, -305.0f, 113.0f));
-	springArm->SetupAttachment(characterMesh);
+	SpringArm->TargetArmLength = 300.0f;
+	SpringArm->bEnableCameraLag = false;
+	SpringArm->SetRelativeRotation((new FRotator(0.0f, 0.0f, 0.0f))->Quaternion());
+	SpringArm->SetRelativeLocation(FVector(-361.0f, -305.0f, 113.0f));
+	SpringArm->SetupAttachment(RootComponent);
 
 	//Create Camera and attach to SpringArm
-	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	camera->SetupAttachment(springArm);
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm);
 }
 
 // Called when the game starts or when spawned
@@ -41,6 +35,17 @@ void APlayableCharacter::BeginPlay()
 void APlayableCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	//Fix issues with unreal collisions with stationary actor
+	FHitResult OutHit;
+	GetCharacterMovement()->SafeMoveUpdatedComponent(FVector(0.f, 0.f, 0.01f), GetActorRotation(), true, OutHit);
+	GetCharacterMovement()->SafeMoveUpdatedComponent(FVector(0.f, 0.f, -0.01f), GetActorRotation(), true, OutHit);
+
+	FVector Location = GetActorLocation();
+	if (Location.Z < 0)
+	{
+		SetActorLocation({ 0,0,0 });
+	}
 }
 
 // Called to bind functionality to input
@@ -72,4 +77,19 @@ void APlayableCharacter::LookUp(float AxisValue)
 {
 	//Rotate view up and down
 	AddControllerPitchInput(AxisValue);
+}
+
+void APlayableCharacter::Dive()
+{
+	ServerDive();
+}
+
+void APlayableCharacter::ServerDive_Implementation()
+{
+	LaunchCharacter(GetActorForwardVector() * DiveStrength, false, false);
+}
+
+bool APlayableCharacter::ServerDive_Validate()
+{
+	return true;
 }
