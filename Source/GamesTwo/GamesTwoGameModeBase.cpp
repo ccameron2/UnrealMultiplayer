@@ -1,5 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-
 #include "GamesTwoGameModeBase.h"
+
+void AGamesTwoGameModeBase::BeginPlay()
+{
+}
+
 

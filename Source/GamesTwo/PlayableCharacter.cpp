@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "GameFramework/CharacterMovementComponent.h" 
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 #include "PlayableCharacter.h"
 
 // Sets default values
@@ -28,7 +30,6 @@ APlayableCharacter::APlayableCharacter()
 void APlayableCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -53,6 +54,7 @@ void APlayableCharacter::Tick(float DeltaTime)
 			SetActorLocation({ -200,600,0 }, false, nullptr, ETeleportType::ResetPhysics);
 		}
 	}
+	
 }
 
 // Called to bind functionality to input
@@ -75,24 +77,27 @@ void APlayableCharacter::MoveForward(float AxisValue)
 void APlayableCharacter::Strafe(float AxisValue)
 {
 	//Strafe character left and right
-	AddMovementInput(GetActorRightVector() * AxisValue);
+	AddMovementInput(GetActorRightVector() * AxisValue);	
 }
 
 void APlayableCharacter::Turn(float AxisValue)
-{
+{	
 	//Turn character left and right
 	AddControllerYawInput(AxisValue);
+	
 }
 
 void APlayableCharacter::LookUp(float AxisValue)
 {
+
 	//Rotate view up and down
 	AddControllerPitchInput(AxisValue);
+
 }
 
 void APlayableCharacter::Dive()
 {
-	ServerDive();
+	ServerDive();	
 }
 
 void APlayableCharacter::ServerDive_Implementation()
@@ -104,3 +109,5 @@ bool APlayableCharacter::ServerDive_Validate()
 {
 	return true;
 }
+
+

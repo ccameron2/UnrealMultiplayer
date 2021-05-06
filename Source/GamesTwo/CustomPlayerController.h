@@ -2,6 +2,8 @@
 
 #pragma once
 #include "PlayableCharacter.h"
+#include "CustomPlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
@@ -30,4 +32,17 @@ private:
 	virtual void CallJump();
 	virtual void CallLookUp(float Value);
 	virtual void CallDive();
+
+	UPROPERTY(EditAnywhere)
+		float WaitTime = 12.0f;
+
+	FTimerHandle GameStartTimerHandle;
+
+	UFUNCTION()
+		void GameStartTimerEnd();
+
+public:
+	UPROPERTY(EditAnywhere)
+		bool GameStart = false;
+
 };

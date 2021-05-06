@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Checkpoint.h"
+#include "GamesTwoGameModeBase.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -23,6 +24,7 @@ public:
 	void Turn(float AxisValue);
 	void LookUp(float AxisValue);
 	void Dive();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -49,7 +51,6 @@ private:
 
 	UFUNCTION(Server, Reliable, WithValidation) //RPC
 		void ServerDive();
-
 
 
 };

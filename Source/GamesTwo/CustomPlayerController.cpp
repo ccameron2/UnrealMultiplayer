@@ -7,6 +7,7 @@ void ACustomPlayerController::BeginPlay()
 	Super::BeginPlay();
 	//Get pawn reference
 	MyPawn = Cast<APlayableCharacter>(GetPawn());
+	GetWorld()->GetTimerManager().SetTimer(GameStartTimerHandle, this, &ACustomPlayerController::GameStartTimerEnd, WaitTime, false);
 }
 
 void ACustomPlayerController::SetupInputComponent()
@@ -27,49 +28,73 @@ void ACustomPlayerController::SetupInputComponent()
 
 void ACustomPlayerController::CallForward(float Value)
 {
-	if (MyPawn)
+	if (GameStart)
 	{
-		MyPawn->MoveForward(Value);
+		if (MyPawn)
+		{
+			MyPawn->MoveForward(Value);
+		}
 	}
 }
 
 void ACustomPlayerController::CallTurn(float Value)
 {
-	if (MyPawn)
+	if (GameStart)
 	{
-		MyPawn->Turn(Value);
+		if (MyPawn)
+		{
+			MyPawn->Turn(Value);
+		}
 	}
+	
 }
 
 
 void ACustomPlayerController::CallStrafe(float Value)
 {
-	if (MyPawn)
+	if (GameStart)
 	{
-		MyPawn->Strafe(Value);
+		if (MyPawn)
+		{
+			MyPawn->Strafe(Value);
+		}
 	}
 }
 
 void ACustomPlayerController::CallJump()
 {
-	if (MyPawn)
+	if (GameStart)
 	{
-		MyPawn->Jump();
+		if (MyPawn)
+		{
+			MyPawn->Jump();
+		}
 	}
 }
 
 void ACustomPlayerController::CallLookUp(float Value)
 {
-	if (MyPawn)
+	if (GameStart)
 	{
-		MyPawn->LookUp(-Value);
+		if (MyPawn)
+		{
+			MyPawn->LookUp(-Value);
+		}
 	}
 }
 
 void ACustomPlayerController::CallDive()
 {
-	if (MyPawn)
+	if (GameStart)
 	{
-		MyPawn->Dive();
+		if (MyPawn)
+		{
+			MyPawn->Dive();
+		}
 	}
+}
+
+void ACustomPlayerController::GameStartTimerEnd()
+{
+	GameStart = true;
 }
