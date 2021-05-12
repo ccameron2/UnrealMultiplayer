@@ -17,5 +17,5 @@ public:
 	void LogFinish();
 
 private:
-	int TotalJoins;
+	int TotalFinished = 0;
 };

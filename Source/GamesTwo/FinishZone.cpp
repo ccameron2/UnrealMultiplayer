@@ -40,7 +40,7 @@ void AFinishZone::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 			if (OtherCharacter->HasFinished == false)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Player Finished"));
-				OtherCharacter->HasFinished = true;
+				OtherCharacter->Finished();
 				PlayersCrossed++;
 			}
 		}

@@ -6,5 +6,5 @@
 void ACustomGameStateBase::LogFinish()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player Join Logged (GameState)"));
-	TotalJoins++;
+	TotalFinished++;
 }

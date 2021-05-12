@@ -74,6 +74,15 @@ void APlayableCharacter::SetLatestCheckpoint(ACheckpoint* Checkpoint)
 	CheckpointRef = Checkpoint;
 }
 
+void APlayableCharacter::Finished()
+{
+	HasFinished = true;
+	if(AGamesTwoGameModeBase* GMode = GetWorld()->GetAuthGameMode<AGamesTwoGameModeBase>())
+	{
+		GMode->LogPlayerFinished();
+	}
+}
+
 void APlayableCharacter::Push()
 {
 	ServerPush();

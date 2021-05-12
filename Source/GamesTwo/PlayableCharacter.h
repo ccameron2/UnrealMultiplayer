@@ -7,6 +7,7 @@
 #include "Checkpoint.h"
 #include "GamesTwoGameModeBase.h"
 #include "DrawDebugHelpers.h"
+#include "GamesTwoGameModeBase.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -53,6 +54,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		bool HasFinished = false;
 
+	UFUNCTION()
+		void Finished();
+
 private:
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* Camera;
@@ -71,7 +75,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		float CastRange = 75.0f; //Equals 100cm when combined with raycasting point offset from player center.
-
 
 	
 };
