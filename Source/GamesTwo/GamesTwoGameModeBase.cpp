@@ -3,8 +3,21 @@
 #include "GamesTwoGameModeBase.h"
 #include "CustomGameStateBase.h"
 
+AGamesTwoGameModeBase::AGamesTwoGameModeBase()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
+
 void AGamesTwoGameModeBase::BeginPlay()
 {
+	
+}
+
+void AGamesTwoGameModeBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	ACustomGameStateBase* GState = GetGameState<ACustomGameStateBase>();
+	GState->CountPlayers();
 }
 
 void AGamesTwoGameModeBase::LogPlayerFinished()

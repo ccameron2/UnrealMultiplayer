@@ -1,10 +1,53 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "PlayableCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 #include "CustomGameStateBase.h"
+
+void ACustomGameStateBase::CountPlayers()
+{
+	if (HasAuthority())
+	{
+		TArray<AActor*> FoundActors;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayableCharacter::StaticClass(), FoundActors);
+		TotalConnected = FoundActors.Num();
+	}
+}
 
 void ACustomGameStateBase::LogFinish()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Player Join Logged (GameState)"));
-	TotalFinished++;
+	if (HasAuthority())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player Finish Logged (GameState)"));
+		TotalFinished++;
+		UE_LOG(LogTemp, Warning, TEXT("Players Finished: %i"),TotalFinished);
+	}
+}
+
+int ACustomGameStateBase::GetFinished()
+{
+	return TotalFinished;
+}
+
+int ACustomGameStateBase::GetConnected()
+{
+	return TotalConnected;
+}
+
+int ACustomGameStateBase::GetMax()
+{
+	return MaxPlayers;
+}
+
+void ACustomGameStateBase::OnRep_TotalFinished()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Total Finishes Replicated on Client: %i"),TotalFinished);
+}
+
+void ACustomGameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ACustomGameStateBase, TotalFinished);
+	DOREPLIFETIME(ACustomGameStateBase, TotalConnected);
 }

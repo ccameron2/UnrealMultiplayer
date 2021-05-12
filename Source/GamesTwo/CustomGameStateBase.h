@@ -14,8 +14,22 @@ class GAMESTWO_API ACustomGameStateBase : public AGameStateBase
 {
 	GENERATED_BODY()
 public:
+	void CountPlayers();
 	void LogFinish();
-
+	UFUNCTION(BlueprintPure)
+		int GetFinished();
+	UFUNCTION(BlueprintPure)
+		int GetConnected();
+	UFUNCTION(BlueprintPure)
+		int GetMax();
 private:
-	int TotalFinished = 0;
+	UFUNCTION()
+		void OnRep_TotalFinished();
+
+	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_TotalFinished)
+		int TotalFinished = 0;
+	UPROPERTY(EditAnywhere, Replicated)
+		int TotalConnected = 0;
+	UPROPERTY(EditAnywhere)
+		int MaxPlayers = 4;
 };

@@ -44,7 +44,7 @@ private:
 
 public:
 	UPROPERTY(EditAnywhere)
-		bool GameStart = false;
+		bool GameStart = true;
 
 	UPROPERTY(EditAnywhere)
 		bool InvertMouse = false;

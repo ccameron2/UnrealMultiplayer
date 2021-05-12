@@ -1,14 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "CustomPlayerController.h"
+
 void ACustomPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	//Get pawn reference
 	MyPawn = Cast<APlayableCharacter>(GetPawn());
-	GetWorld()->GetTimerManager().SetTimer(GameStartTimerHandle, this, &ACustomPlayerController::GameStartTimerEnd, WaitTime, false);
-	FString MapName = GetWorld()->GetMapName();
+	if (GameStart == false)
+	{
+		GetWorld()->GetTimerManager().SetTimer(GameStartTimerHandle, this, &ACustomPlayerController::GameStartTimerEnd, WaitTime, false);
+	}
 }
 
 void ACustomPlayerController::SetupInputComponent()

@@ -33,5 +33,5 @@ private:
 	UPROPERTY(EditAnywhere)
 		int PlayersCrossed = 0;
 	UPROPERTY(EditAnywhere)
-		int MaxPlayersCrossed = 2;
+		int MaxPlayersCrossed = 4;
 };

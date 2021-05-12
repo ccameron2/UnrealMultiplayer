@@ -30,7 +30,7 @@ void UCustomGameInstance::Host()
 	UWorld* WorldRef = GetWorld();
 	if (WorldRef != nullptr)
 	{
-		WorldRef->ServerTravel("/Game/Level?listen");
+		WorldRef->ServerTravel("/Game/Lobby?listen");
 	}
 
 }
