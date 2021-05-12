@@ -21,8 +21,8 @@ public:
 	UFUNCTION(BlueprintPure)
 		int GetTheNumPlayers();
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 		int NumPlayers = 0;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 		int MaxPlayers = 4;
 };

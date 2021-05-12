@@ -50,4 +50,5 @@ void ACustomGameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ACustomGameStateBase, TotalFinished);
 	DOREPLIFETIME(ACustomGameStateBase, TotalConnected);
+	DOREPLIFETIME(ACustomGameStateBase, GameStart);
 }

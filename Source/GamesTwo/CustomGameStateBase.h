@@ -22,6 +22,8 @@ public:
 		int GetConnected();
 	UFUNCTION(BlueprintPure)
 		int GetMax();
+	UPROPERTY(VisibleAnywhere, Replicated)
+		bool GameStart = false;
 private:
 	UFUNCTION()
 		void OnRep_TotalFinished();
@@ -32,4 +34,5 @@ private:
 		int TotalConnected = 0;
 	UPROPERTY(EditAnywhere)
 		int MaxPlayers = 4;
+
 };

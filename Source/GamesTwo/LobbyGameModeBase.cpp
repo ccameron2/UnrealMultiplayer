@@ -5,6 +5,7 @@
 #include "CustomGameStateBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "PlayableCharacter.h"
+#include "Net/UnrealNetwork.h"
 #include "CustomPlayerController.h"
 
 void ALobbyGameModeBase::PostLogin(APlayerController* NewPlayer)
@@ -13,12 +14,7 @@ void ALobbyGameModeBase::PostLogin(APlayerController* NewPlayer)
 	NumPlayers++;
 	if (NumPlayers == MaxPlayers)
 	{
-		TArray<AActor*> FoundActors;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayableCharacter::StaticClass(), FoundActors);
-		for (int i = 0; i < FoundActors.Num(); i++)
-		{
-			Cast<ACustomPlayerController>(Cast<APlayableCharacter>(FoundActors[i])->GetInstigatorController())->GameStart = false;
-		}
+
 		GetWorld()->ServerTravel("Level");
 	}
 }
@@ -31,4 +27,10 @@ int ALobbyGameModeBase::GetTheMaxPlayers()
 int ALobbyGameModeBase::GetTheNumPlayers()
 {
 	return NumPlayers;
+}
+void ALobbyGameModeBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ALobbyGameModeBase, NumPlayers);
+	DOREPLIFETIME(ALobbyGameModeBase, MaxPlayers);
 }

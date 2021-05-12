@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+#include "CustomGameStateBase.h"
 #include "CustomPlayerController.h"
 
 void ACustomPlayerController::BeginPlay()
@@ -7,6 +7,10 @@ void ACustomPlayerController::BeginPlay()
 	Super::BeginPlay();
 	//Get pawn reference
 	MyPawn = Cast<APlayableCharacter>(GetPawn());
+	if (Cast<ACustomGameStateBase>(GetWorld()->GetGameState()))
+	{
+		GameStart = Cast<ACustomGameStateBase>(GetWorld()->GetGameState())->GameStart;
+	}
 	if (GameStart == false)
 	{
 		GetWorld()->GetTimerManager().SetTimer(GameStartTimerHandle, this, &ACustomPlayerController::GameStartTimerEnd, WaitTime, false);
