@@ -15,7 +15,7 @@ APlayableCharacter::APlayableCharacter()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 
 	// Springarm settings
-	SpringArm->TargetArmLength = 300.0f;
+	SpringArm->TargetArmLength = SpringArmLength;
 	SpringArm->bEnableCameraLag = false;
 	SpringArm->SetRelativeRotation((new FRotator(0.0f, 0.0f, 0.0f))->Quaternion());
 	SpringArm->SetRelativeLocation(FVector(-361.0f, -305.0f, 113.0f));
@@ -24,6 +24,12 @@ APlayableCharacter::APlayableCharacter()
 	//Create Camera and attach to SpringArm
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	//Create Raycasting cast point for enemy characters
+	RaycastingCastPoint = CreateDefaultSubobject<USceneComponent>(TEXT("RaycastingPoint"));
+	RaycastingCastPoint->SetRelativeLocation(FVector(25.0f, 0.0f, 50.0f));
+	RaycastingCastPoint->SetupAttachment(RootComponent);
+	
 }
 
 // Called when the game starts or when spawned
@@ -66,6 +72,63 @@ void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 void APlayableCharacter::SetLatestCheckpoint(ACheckpoint* Checkpoint)
 {
 	CheckpointRef = Checkpoint;
+}
+
+void APlayableCharacter::Push()
+{
+	ServerPush();
+}
+
+void APlayableCharacter::ServerPush_Implementation()
+{
+
+	FCollisionQueryParams CollisionParams;
+
+	//Create raycasting hit variables
+	FHitResult Hit;
+	bool bDidHit;
+
+	//Get location of raycasting end point
+	FVector End = RaycastingCastPoint->GetComponentLocation() + RaycastingCastPoint->GetComponentRotation().Vector() * CastRange;
+
+	//Raycast from point of view
+	bDidHit = GetWorld()->LineTraceSingleByChannel(Hit, RaycastingCastPoint->GetComponentLocation(), End, ECC_Visibility, CollisionParams);
+
+	//Trace line on screen for debugging
+	//DrawDebugLine(GetWorld(), RaycastingCastPoint->GetComponentLocation(), End, FColor::Green, false, 1, 0, 1);
+
+	if (bDidHit)//if raycast hits something
+	{
+		if (Hit.GetActor() != nullptr)
+		{
+			//Output name of hit actor to log
+			UE_LOG(LogTemp, Warning, TEXT("Hit Something: %s"), *Hit.GetActor()->GetName());
+
+			//Get root component of hit actor
+			UPrimitiveComponent* RootComp = Cast<UPrimitiveComponent>(Hit.GetActor()->GetRootComponent());
+
+			if (Cast<APlayableCharacter>(Hit.GetActor()))//If hit a character
+			{
+				if (Hit.GetActor()->GetInstigatorController() == this->GetInstigatorController())
+				{
+					return;
+				}
+				//Launch other character
+				Cast<APlayableCharacter>(Hit.GetActor())->LaunchCharacter(GetActorForwardVector() * DiveStrength, false, false);
+			}
+
+		}
+		else
+		{
+			//Output successful hit to log
+			UE_LOG(LogTemp, Warning, TEXT("Hit Something"));
+		}
+
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Missed"));
+	}
 }
 
 void APlayableCharacter::MoveForward(float AxisValue)

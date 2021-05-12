@@ -32,12 +32,13 @@ private:
 	virtual void CallJump();
 	virtual void CallLookUp(float Value);
 	virtual void CallDive();
+	virtual void CallPush();
 
 	UPROPERTY(EditAnywhere)
 		float WaitTime = 12.0f;
 
 	FTimerHandle GameStartTimerHandle;
-
+	
 	UFUNCTION()
 		void GameStartTimerEnd();
 
@@ -45,4 +46,6 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool GameStart = false;
 
+	UPROPERTY(EditAnywhere)
+		bool InvertMouse = false;
 };

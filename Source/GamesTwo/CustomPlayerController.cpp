@@ -8,6 +8,7 @@ void ACustomPlayerController::BeginPlay()
 	//Get pawn reference
 	MyPawn = Cast<APlayableCharacter>(GetPawn());
 	GetWorld()->GetTimerManager().SetTimer(GameStartTimerHandle, this, &ACustomPlayerController::GameStartTimerEnd, WaitTime, false);
+	FString MapName = GetWorld()->GetMapName();
 }
 
 void ACustomPlayerController::SetupInputComponent()
@@ -23,7 +24,7 @@ void ACustomPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ACustomPlayerController::CallJump);
 	InputComponent->BindAxis("Look Up", this, &ACustomPlayerController::CallLookUp);
 	InputComponent->BindAction("Dive", EInputEvent::IE_Pressed, this, &ACustomPlayerController::CallDive);
-
+	InputComponent->BindAction("Push", EInputEvent::IE_Pressed, this, &ACustomPlayerController::CallPush);
 }
 
 void ACustomPlayerController::CallForward(float Value)
@@ -78,7 +79,14 @@ void ACustomPlayerController::CallLookUp(float Value)
 	{
 		if (MyPawn)
 		{
-			MyPawn->LookUp(-Value);
+			if (InvertMouse)
+			{
+				MyPawn->LookUp(Value);
+			}
+			else
+			{
+				MyPawn->LookUp(-Value);
+			}
 		}
 	}
 }
@@ -90,6 +98,17 @@ void ACustomPlayerController::CallDive()
 		if (MyPawn)
 		{
 			MyPawn->Dive();
+		}
+	}
+}
+
+void ACustomPlayerController::CallPush()
+{
+	if (GameStart)
+	{
+		if (MyPawn)
+		{
+			MyPawn->Push();
 		}
 	}
 }

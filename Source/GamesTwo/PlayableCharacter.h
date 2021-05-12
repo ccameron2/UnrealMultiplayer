@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Checkpoint.h"
 #include "GamesTwoGameModeBase.h"
+#include "DrawDebugHelpers.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -24,6 +25,7 @@ public:
 	void Turn(float AxisValue);
 	void LookUp(float AxisValue);
 	void Dive();
+	void Push();
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,10 +40,19 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		float DiveStrength = 1000.0f;
+
 	UFUNCTION()
 		void SetLatestCheckpoint(ACheckpoint* Checkpoint);
+
 	UPROPERTY(VisibleAnywhere)
 		ACheckpoint* CheckpointRef;
+
+	UFUNCTION(Server, Reliable) //RPC
+		void ServerPush();
+
+	UPROPERTY(VisibleAnywhere)
+		bool HasFinished = false;
+
 private:
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* Camera;
@@ -49,8 +60,18 @@ private:
 	UPROPERTY(EditAnywhere)
 		USpringArmComponent* SpringArm;
 
+	UPROPERTY(EditAnywhere)
+		USceneComponent* RaycastingCastPoint;
+
+	UPROPERTY(EditAnywhere)
+		float SpringArmLength = 300.0f;
+
 	UFUNCTION(Server, Reliable, WithValidation) //RPC
 		void ServerDive();
 
+	UPROPERTY(EditAnywhere)
+		float CastRange = 75.0f; //Equals 100cm when combined with raycasting point offset from player center.
 
+
+	
 };
