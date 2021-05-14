@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	ASlidingDoor();
 	bool GoingUp = false;
-	bool Moving = true;
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,11 +25,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	FTimerHandle WaitTimer;
+
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* StaticMesh;
 
 	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_MovementRate)
 		float MovementRate = 200.0f;
+
+	UPROPERTY(EditAnywhere, Replicated)
+		bool IsMoving = true;
 
 	UFUNCTION()
 		void OnRep_MovementRate();
@@ -38,6 +43,12 @@ public:
 		FVector OriginalLocation;
 
 	UPROPERTY(EditAnywhere)
-		float MovementAmount = 200.0f;
+		float MovementAmount = 300.0f;
+
+	UFUNCTION(NetMultiCast, Reliable)
+		void OnWaitEnd();
+
+	UFUNCTION()
+		void StartWait();
 
 };

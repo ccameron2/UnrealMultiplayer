@@ -18,6 +18,7 @@ class GAMESTWO_API ACustomPlayerController : public APlayerController
 public:
 	void SetupInputComponent();
 
+	//Controlled pawn
 	UPROPERTY()
 		class APlayableCharacter* MyPawn;
 
@@ -41,10 +42,11 @@ private:
 	UFUNCTION()
 		void GameStartTimerEnd();
 
-public:
+public:	
 	UPROPERTY(EditAnywhere)
 		bool GameStart = true;
 
+	//Personal accessibility variable
 	UPROPERTY(EditAnywhere)
 		bool InvertMouse = false;
 };

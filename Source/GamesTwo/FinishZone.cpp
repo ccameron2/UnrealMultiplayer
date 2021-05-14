@@ -14,6 +14,8 @@ AFinishZone::AFinishZone()
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Trigger"));
 	BoxComponent->SetBoxExtent({ 60.0f, 700.0f, 300.0f });
 	BoxComponent->SetupAttachment(RootComponent);
+	Niagara1 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara 1"));
+	Niagara2 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara 2"));
 }
 
 // Called when the game starts or when spawned
@@ -39,28 +41,38 @@ void AFinishZone::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		APlayableCharacter* OtherCharacter = Cast<APlayableCharacter>(OtherActor);
 		if (OtherCharacter)//If other actor is a playable character
 		{
-			if (OtherCharacter->HasFinished == false)
+			if (OtherCharacter->HasFinished == false)//If player has not already crossed the line
 			{
+				if (PlayersCrossed == 0)
+				{
+					MultiNiagara();
+				}
 				UE_LOG(LogTemp, Warning, TEXT("Player Finished"));
+				//Log player has finished on their game state
 				OtherCharacter->Finished();
+				//Count Player
 				PlayersCrossed++;
+				//Play Sound
 				ClientSound();
 			}
 		}
 	}
 	if (PlayersCrossed == MaxPlayersCrossed)
 	{
-		GetWorld()->ServerTravel("/Game/TestLevel?listen");
+		//Move players to finish level
+		GetWorld()->ServerTravel("/Game/Finish?listen");
 	}
 }
 
 void AFinishZone::MultiNiagara_Implementation()
 {
-	
+	Niagara1->Activate();
+	Niagara2->Activate();
 }
 
 void AFinishZone::ClientSound_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Sound Played"));
+	//Play sound on client
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), WinSound, GetActorLocation(), 1.0f, 1.0f, 0.0f);
 }

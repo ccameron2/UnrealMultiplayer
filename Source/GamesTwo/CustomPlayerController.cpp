@@ -10,10 +10,12 @@ void ACustomPlayerController::BeginPlay()
 	MyPawn = Cast<APlayableCharacter>(GetPawn());
 	if (Cast<ACustomGameStateBase>(GetWorld()->GetGameState()))
 	{
+		//Disallow player movement if game state is correct
 		GameStart = Cast<ACustomGameStateBase>(GetWorld()->GetGameState())->GameStart;
 	}
 	if (GameStart == false)
 	{
+		//Set player wait timer.
 		GetWorld()->GetTimerManager().SetTimer(GameStartTimerHandle, this, &ACustomPlayerController::GameStartTimerEnd, WaitTime, false);
 	}
 }
@@ -122,5 +124,6 @@ void ACustomPlayerController::CallPush()
 
 void ACustomPlayerController::GameStartTimerEnd()
 {
+	//Allow player movement
 	GameStart = true;
 }

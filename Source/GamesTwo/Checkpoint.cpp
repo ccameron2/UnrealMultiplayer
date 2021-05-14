@@ -22,6 +22,7 @@ ACheckpoint::ACheckpoint()
 void ACheckpoint::BeginPlay()
 {
 	Super::BeginPlay();
+	//Add dynamic delegate for overlap events
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ACheckpoint::OnOverlapBegin);
 }
 
@@ -37,6 +38,7 @@ void ACheckpoint::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	UE_LOG(LogTemp, Warning, TEXT("OnOverlapBegin"));
 	if (Cast<APlayableCharacter>(OtherActor))//If other actor is a playable character
 	{
+		//Set the checkpoint as actors latest passed checkpoint
 		Cast<APlayableCharacter>(OtherActor)->SetLatestCheckpoint(this);
 	}
 }

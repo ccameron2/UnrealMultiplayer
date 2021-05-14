@@ -2,7 +2,7 @@
 
 #pragma once
 //#include "Engine/Plugins/FX/Niagara/Source/Niagara/Public/NiagaraComponent.h"
-//#include "NiagaraComponent.h"
+#include "NiagaraComponent.h"
 //#include "NiagaraFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 #include "CoreMinimal.h"
@@ -30,21 +30,28 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* BoxComponent;
+
 	UFUNCTION()
 		void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UPROPERTY(EditAnywhere)
+
+	UPROPERTY(VisibleAnywhere)
 		int PlayersCrossed = 0;
+
 	UPROPERTY(EditAnywhere)
 		int MaxPlayersCrossed = 4;
+
 	UFUNCTION(Client, Reliable) //RPC
 		void ClientSound();
+
 	UFUNCTION(NetMulticast, Reliable) //RPC
 		void MultiNiagara();
+
 	UPROPERTY(EditAnywhere)
 		USoundBase* WinSound;
-	//UPROPERTY(EditAnywhere)
-	//	UNiagraComponent* Niagra1;
-	//UPROPERTY(EditAnywhere)
-	//	UNiagraComponent* Niagra2;
+
+	UPROPERTY(EditAnywhere)
+		UNiagaraComponent* Niagara1;
+	UPROPERTY(EditAnywhere)	   
+		UNiagaraComponent* Niagara2;
 
 };

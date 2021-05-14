@@ -8,6 +8,7 @@ void ACustomGameStateBase::CountPlayers()
 {
 	if (HasAuthority())
 	{
+		//Get amount of actors of PlayableCharacter class in level
 		TArray<AActor*> FoundActors;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayableCharacter::StaticClass(), FoundActors);
 		TotalConnected = FoundActors.Num();

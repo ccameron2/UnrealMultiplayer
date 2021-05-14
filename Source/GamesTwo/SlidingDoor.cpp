@@ -32,25 +32,38 @@ void ASlidingDoor::BeginPlay()
 void ASlidingDoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FVector NewLocation;
-	if (GetActorLocation().Z >= OriginalLocation.Z)
+	if (IsMoving)
 	{
-		GoingUp = false;
+		FVector NewLocation;
+		if (GetActorLocation().Z >= OriginalLocation.Z)
+		{
+			GoingUp = false;
+			IsMoving = false;
+			if (HasAuthority())
+			{
+				StartWait();
+			}
+		}
+		else if (GetActorLocation().Z <= OriginalLocation.Z - MovementAmount)
+		{
+			GoingUp = true;
+			IsMoving = false;
+			if (HasAuthority())
+			{
+				StartWait();
+			}			
+		}
+		if (GoingUp)
+		{
+			NewLocation = FMath::VInterpConstantTo(GetActorLocation(), OriginalLocation, DeltaTime, MovementRate);
+		}
+		else
+		{
+			NewLocation = FMath::VInterpConstantTo(GetActorLocation(), OriginalLocation + FVector(0, 0, -MovementAmount), DeltaTime, MovementRate);
+		}
+		SetActorLocation(NewLocation);
 	}
-	else if(GetActorLocation().Z <= OriginalLocation.Z - MovementAmount)
-	{
-		GoingUp = true;
-	}
-	if (GoingUp)
-	{
-		NewLocation = FMath::VInterpConstantTo(GetActorLocation(), OriginalLocation, DeltaTime, MovementRate);
-	}
-	else
-	{
-		NewLocation = FMath::VInterpConstantTo(GetActorLocation(), OriginalLocation + FVector(0, 0, -MovementAmount), DeltaTime, MovementRate);
-	}
-	SetActorLocation(NewLocation);
-	FMath::RandRange(1, 4);
+	
 }
 
 void ASlidingDoor::OnRep_MovementRate()
@@ -62,5 +75,16 @@ void ASlidingDoor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ASlidingDoor, MovementRate);
+	DOREPLIFETIME(ASlidingDoor, IsMoving);
 }
 
+void ASlidingDoor::StartWait()
+{
+	float WaitTime = FMath::RandRange(1, 4);
+	GetWorld()->GetTimerManager().SetTimer(WaitTimer, this, &ASlidingDoor::OnWaitEnd, WaitTime, false);
+}
+
+void ASlidingDoor::OnWaitEnd_Implementation()
+{
+	IsMoving = true;
+}
