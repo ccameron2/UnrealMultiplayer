@@ -16,13 +16,9 @@ class GAMESTWO_API ALobbyGameModeBase : public AGameModeBase
 public:
 	void PostLogin(APlayerController* NewPlayer) override;
 
-	UFUNCTION(BlueprintPure)
-		int GetTheMaxPlayers();
-	UFUNCTION(BlueprintPure)
-		int GetTheNumPlayers();
 private:
-	UPROPERTY(EditAnywhere, Replicated)
+	UPROPERTY(EditAnywhere)
 		int NumPlayers = 0;
-	UPROPERTY(EditAnywhere, Replicated)
+	UPROPERTY(EditAnywhere)
 		int MaxPlayers = 4;
 };

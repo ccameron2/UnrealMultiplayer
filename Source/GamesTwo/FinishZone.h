@@ -1,12 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
+//#include "Engine/Plugins/FX/Niagara/Source/Niagara/Public/NiagaraComponent.h"
+//#include "NiagaraComponent.h"
+//#include "NiagaraFunctionLibrary.h"
 #include "Components/BoxComponent.h"
-
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "FinishZone.generated.h"
+
 
 UCLASS()
 class GAMESTWO_API AFinishZone : public AActor
@@ -34,4 +36,15 @@ private:
 		int PlayersCrossed = 0;
 	UPROPERTY(EditAnywhere)
 		int MaxPlayersCrossed = 4;
+	UFUNCTION(Client, Reliable) //RPC
+		void ClientSound();
+	UFUNCTION(NetMulticast, Reliable) //RPC
+		void MultiNiagara();
+	UPROPERTY(EditAnywhere)
+		USoundBase* WinSound;
+	//UPROPERTY(EditAnywhere)
+	//	UNiagraComponent* Niagra1;
+	//UPROPERTY(EditAnywhere)
+	//	UNiagraComponent* Niagra2;
+
 };

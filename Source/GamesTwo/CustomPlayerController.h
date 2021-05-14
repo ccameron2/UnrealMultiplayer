@@ -2,7 +2,6 @@
 
 #pragma once
 #include "PlayableCharacter.h"
-#include "CustomPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "CoreMinimal.h"

@@ -1,9 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+#include "CustomGameStateBase.h"
 #include "PlayableCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
-#include "CustomGameStateBase.h"
 
 void ACustomGameStateBase::CountPlayers()
 {

@@ -4,6 +4,8 @@
 #include "FinishZone.h"
 #include "PlayableCharacter.h"
 #include "Kismet\GameplayStatics.h"
+
+
 // Sets default values
 AFinishZone::AFinishZone()
 {
@@ -42,6 +44,7 @@ void AFinishZone::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 				UE_LOG(LogTemp, Warning, TEXT("Player Finished"));
 				OtherCharacter->Finished();
 				PlayersCrossed++;
+				ClientSound();
 			}
 		}
 	}
@@ -49,4 +52,15 @@ void AFinishZone::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	{
 		GetWorld()->ServerTravel("/Game/TestLevel?listen");
 	}
+}
+
+void AFinishZone::MultiNiagara_Implementation()
+{
+	
+}
+
+void AFinishZone::ClientSound_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Sound Played"));
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), WinSound, GetActorLocation(), 1.0f, 1.0f, 0.0f);
 }

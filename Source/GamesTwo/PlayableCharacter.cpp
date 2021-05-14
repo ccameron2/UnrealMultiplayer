@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+#include "PlayableCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-#include "PlayableCharacter.h"
+
 
 // Sets default values
 APlayableCharacter::APlayableCharacter()
