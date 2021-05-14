@@ -49,7 +49,7 @@ void APlayableCharacter::Tick(float DeltaTime)
 	GetCharacterMovement()->SafeMoveUpdatedComponent(FVector(0.f, 0.f, -0.01f), GetActorRotation(), true, OutHit);
 
 	FVector Location = GetActorLocation();
-	if (Location.Z < -100)
+	if (Location.Z < -FallDistance)
 	{
 		if (CheckpointRef != nullptr)
 		{
@@ -169,7 +169,18 @@ void APlayableCharacter::LookUp(float AxisValue)
 
 void APlayableCharacter::Dive()
 {
-	ServerDive();	
+	if (JumpCooldown)
+	{
+		//Do Nothing
+	}
+	else
+	{
+		JumpCooldown = true;
+		ServerDive();
+		//Start timer to reset jump cooldown
+		GetWorld()->GetTimerManager().SetTimer(JumpTimer, this, &APlayableCharacter::OnCooldownEnd, JumpDelay, false);
+	}
+		
 }
 
 void APlayableCharacter::ServerDive_Implementation()
@@ -182,4 +193,7 @@ bool APlayableCharacter::ServerDive_Validate()
 	return true;
 }
 
-
+void APlayableCharacter::OnCooldownEnd()
+{
+	JumpCooldown = false;
+}

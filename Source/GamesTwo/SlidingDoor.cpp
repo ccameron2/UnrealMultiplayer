@@ -19,6 +19,7 @@ ASlidingDoor::ASlidingDoor()
 void ASlidingDoor::BeginPlay()
 {
 	Super::BeginPlay();
+	//Save original location
 	OriginalLocation = GetActorLocation();
 	if (HasAuthority())
 	{
@@ -32,16 +33,17 @@ void ASlidingDoor::BeginPlay()
 void ASlidingDoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//If door should be moving
 	if (IsMoving)
-	{
+	{		
 		FVector NewLocation;
-		if (GetActorLocation().Z >= OriginalLocation.Z)
+		if (GetActorLocation().Z >= OriginalLocation.Z) //If door should be moving down
 		{
 			GoingUp = false;
 			IsMoving = false;
 			if (HasAuthority())
 			{
-				StartWait();
+				StartWait(); 
 			}
 		}
 		else if (GetActorLocation().Z <= OriginalLocation.Z - MovementAmount)
@@ -80,6 +82,7 @@ void ASlidingDoor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 
 void ASlidingDoor::StartWait()
 {
+	//Set timer with random time between 1 and 4 seconds
 	float WaitTime = FMath::RandRange(1, 4);
 	GetWorld()->GetTimerManager().SetTimer(WaitTimer, this, &ASlidingDoor::OnWaitEnd, WaitTime, false);
 }

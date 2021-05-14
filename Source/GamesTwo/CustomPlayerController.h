@@ -34,9 +34,7 @@ private:
 	virtual void CallDive();
 	virtual void CallPush();
 
-	UPROPERTY(EditAnywhere)
-		float WaitTime = 12.0f;
-
+	//Timer for start of game
 	FTimerHandle GameStartTimerHandle;
 	
 	UFUNCTION()
@@ -45,6 +43,9 @@ private:
 public:	
 	UPROPERTY(EditAnywhere)
 		bool GameStart = true;
+
+	UPROPERTY(EditAnywhere)
+		float WaitTime = 12.0f;
 
 	//Personal accessibility variable
 	UPROPERTY(EditAnywhere)

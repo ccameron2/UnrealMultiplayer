@@ -11,11 +11,19 @@ AFinishZone::AFinishZone()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	//Create trigger box
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Trigger"));
 	BoxComponent->SetBoxExtent({ 60.0f, 700.0f, 300.0f });
 	BoxComponent->SetupAttachment(RootComponent);
+
+	//Create Niagara components and attach to root component
 	Niagara1 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara 1"));
+	Niagara1->SetupAttachment(RootComponent);
 	Niagara2 = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara 2"));
+	Niagara2->SetupAttachment(RootComponent);
+	bReplicates = true;
+
 }
 
 // Called when the game starts or when spawned
@@ -24,6 +32,7 @@ void AFinishZone::BeginPlay()
 	Super::BeginPlay();
 	//Create dynamic delegate for overlap events
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AFinishZone::OnOverlapBegin);
+	SetReplicates(true);
 }
 
 // Called every frame
@@ -45,7 +54,10 @@ void AFinishZone::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 			{
 				if (PlayersCrossed == 0)
 				{
-					MultiNiagara();
+					if (HasAuthority())
+					{
+						MultiNiagara();
+					}			
 				}
 				UE_LOG(LogTemp, Warning, TEXT("Player Finished"));
 				//Log player has finished on their game state

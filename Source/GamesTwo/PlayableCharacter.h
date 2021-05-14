@@ -57,6 +57,11 @@ public:
 	UFUNCTION()
 		void Finished();
 
+	UPROPERTY(VisibleAnywhere)
+		bool JumpCooldown = false;
+
+	FTimerHandle JumpTimer;
+
 private:
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* Camera;
@@ -76,5 +81,12 @@ private:
 	UPROPERTY(EditAnywhere)
 		float CastRange = 75.0f; //Equals 100cm when combined with raycasting point offset from player center.
 
-	
+	UPROPERTY(EditAnywhere)
+		float FallDistance = 200.0f;
+
+	UPROPERTY(EditAnywhere)
+		float JumpDelay = 3.0f;
+
+	UFUNCTION()
+		void OnCooldownEnd();
 };
